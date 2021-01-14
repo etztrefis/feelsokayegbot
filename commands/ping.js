@@ -7,6 +7,6 @@ module.exports.help = {
     description: 'Ping!',
     run: async () => {
         const channelsCount = await fob.Channel.getJoinable();
-        return `Pong! Okayeg \\u{1F44D} Channels: ${channelsCount.length} Uptime: ${fob.Utils.misc.uptime()}.`;
+        return `Pong! Okayeg \\u{1F44D} Channels: ${channelsCount.length}, Commands executed: ${fob.Temp.cmdCount}, Uptime: ${fob.Utils.misc.uptime()}.`;
     },
 };

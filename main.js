@@ -16,7 +16,7 @@ fob.Channel = require('./modules/channel');
 fob.Twitch = require('./client/twitch');
 // fob.TwitchPubsub = require('./client/twitch-pubsub');
 
-fob.Temp.cmdCount = 0;
+fob.Temp.cmdCount = 1;
 fob.Temp.cmdFiles = new Map();
 fob.Temp.cmdAliases = new Map();
 
