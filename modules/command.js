@@ -37,7 +37,7 @@ module.exports.sync = async function commandSync() {
         (cmd) => !cmd.help.archived,
     );
     for (const cmd of cmdFiles) {
-        await fob.Logger.info('Updating commands in database. 🔧 ');
+        await fob.Logger.info(`Loads ${cmd.help.name} command in database. 🔧 `);
         if (cmd.help.aliases) {
             await fob.Utils.db
                 .query(
