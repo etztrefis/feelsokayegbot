@@ -48,6 +48,13 @@ module.exports.tmi = got.extend({
     responseType: 'json',
 });
 
+// GitHub API
+module.exports.gh = got.extend({
+    prefixUrl: 'https://api.github.com/',
+    timeout: 3500,
+    responseType: 'json',
+});
+
 // Logs API
 module.exports.logs = got.extend({
     prefixUrl: 'https://logs.ivr.fi',
