@@ -203,7 +203,6 @@ const handleMsg = async (msg) => {
 
         // Check if cooldown is active.
         if (await fob.Modules.cooldown(cmdData, {Mode: 'check'})) {
-            // console.log('cooldown');
             return;
         }
 

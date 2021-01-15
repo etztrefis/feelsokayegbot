@@ -1,12 +1,5 @@
 const got = require('got');
 
-// Generic pajbot Banphrases
-module.exports.ban = got.extend({
-    responseType: 'json',
-    method: 'post',
-    timeout: 1500,
-});
-
 // Generic GET requests
 module.exports.generic = got.extend({
     timeout: 1500,
