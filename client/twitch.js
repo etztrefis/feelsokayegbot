@@ -3,7 +3,7 @@ const chalk = require('chalk');
 
 const client = new Twitch.ChatClient({
     username: fob.Config.username,
-    rateLimits: 'verifiedBot',
+    rateLimits: 'knownBot',
 });
 
 client.use(new Twitch.AlternateMessageModifier(client));
@@ -190,7 +190,6 @@ const handleMsg = async (msg) => {
     if (type === 'privmsg' && channelMeta.Ignore === 1) {
         return;
     }
-
     // Input is a command. Process it as such
     if (msg.messageText.startsWith(fob.Config.prefix)) {
         const cmdMeta = await fob.Command.get(commandstring);
@@ -199,6 +198,10 @@ const handleMsg = async (msg) => {
             return;
         } else {
             cmdData.cmdMeta = cmdMeta;
+        }
+
+        if (cmdData.cmdMeta.Author_Permission === 1 && msg.senderUsername !== 'trefis') {
+            return;
         }
 
         // Check if cooldown is active.

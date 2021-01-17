@@ -41,8 +41,8 @@ module.exports.sync = async function commandSync() {
         if (cmd.help.aliases) {
             await fob.Utils.db
                 .query(
-                    `INSERT INTO Commands (Name, Aliases, Description, Code, Cooldown, Cooldown_Mode) VALUES 
-                    ("${cmd.help.name}", '${JSON.stringify(cmd.help.aliases)}', "${cmd.help.description}", "${String(cmd.help.run)}", "${cmd.help.cooldown}", "${cmd.help.cooldown_mode}")`)
+                    `INSERT INTO Commands (Name, Aliases, Description, Code, Cooldown, Cooldown_Mode, Author_Permission) VALUES 
+                    ("${cmd.help.name}", '${JSON.stringify(cmd.help.aliases)}', "${cmd.help.description}", "${String(cmd.help.run)}", "${cmd.help.cooldown}", "${cmd.help.cooldown_mode}", ${cmd.help.permission ?? 0})`)
                 .catch((e) => {
                     fob.Logger.warn(
                         `${chalk.red('[Sequelize Error]')} || ${
