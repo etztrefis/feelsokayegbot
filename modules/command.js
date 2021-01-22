@@ -41,8 +41,8 @@ module.exports.sync = async function commandSync() {
         if (cmd.help.aliases) {
             await fob.Utils.db
                 .query(
-                    `INSERT INTO Commands (Name, Aliases, Description, Code, Cooldown, Cooldown_Mode, Author_Permission) VALUES 
-                    ("${cmd.help.name}", '${JSON.stringify(cmd.help.aliases)}', "${cmd.help.description}", "${String(cmd.help.run)}", "${cmd.help.cooldown}", "${cmd.help.cooldown_mode}", ${cmd.help.permission ?? 0})`)
+                    `INSERT INTO Commands (Name, Aliases, Description, Code, Cooldown, Cooldown_Mode, Author_Permission, Active) VALUES 
+                    ("${cmd.help.name}", '${JSON.stringify(cmd.help.aliases)}', "${cmd.help.description}", "${String(cmd.help.run)}", "${cmd.help.cooldown}", "${cmd.help.cooldown_mode}", ${cmd.help.permission ?? 0}, ${cmd.help.active ?? 1})`)
                 .catch((e) => {
                     fob.Logger.warn(
                         `${chalk.red('[Sequelize Error]')} || ${
@@ -70,6 +70,7 @@ module.exports.sync = async function commandSync() {
     }
 
     module.exports.get = async (cmdString) => {
+        cmdString = cmdString.replace(/[/]/|/`/|/"/|/'/|/\n|\r/g, '');
         let command = await fob.Utils.db
             .query(`SELECT * FROM Commands WHERE Name = "${cmdString}"`)
             .catch((e) => {
@@ -119,8 +120,6 @@ module.exports.sync = async function commandSync() {
 
         const cmdEvalResp = await eval(commandData.Code)(cmdMeta);
 
-        const cmdResp = `@${cmdMeta.user.name}, ${cmdEvalResp}`;
-
-        return {state: true, cmd: cmdString, data: cmdResp};
+        return {state: true, cmd: cmdString, data: cmdEvalResp};
     };
 };

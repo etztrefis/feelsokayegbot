@@ -3,7 +3,7 @@ const chalk = require('chalk');
 
 const client = new Twitch.ChatClient({
     username: fob.Config.username,
-    rateLimits: 'knownBot',
+    rateLimits: 'default',
 });
 
 client.use(new Twitch.AlternateMessageModifier(client));
@@ -49,7 +49,7 @@ client.on('error', (error) => {
 });
 
 client.on('CLEARCHAT', (msg) => {
-    if (msg.isTimeout() && msg.targetUsername === fob.Config.username) {
+    if (msg.isTimeout()) {
         fob.Logger.warn(
             `${chalk.green('[Timeout]')} || Got timed out in ${
                 msg.channelName
@@ -204,6 +204,10 @@ const handleMsg = async (msg) => {
             return;
         }
 
+        if (cmdData.cmdMeta.active === 0) {
+            return;
+        }
+
         // Check if cooldown is active.
         if (await fob.Modules.cooldown(cmdData, {Mode: 'check'})) {
             return;
@@ -280,7 +284,7 @@ const send = async (meta, msg) => {
         if (message.length < msg.length) {
             message = msg.substring(0, lengthLimit - 1) + '…';
         }
-        await client.say(meta.channel, message);
+        await client.privmsg(meta.channel, message);
     } catch (e) {
         if (
             e instanceof Twitch.SayError && e.message.includes('@msg-id=msg_rejected')
