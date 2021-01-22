@@ -1,6 +1,5 @@
 module.exports.help = {
     name: 'update',
-    archived: false,
     cooldown: 0,
     cooldown_mode: 'UserCommand',
     aliases: [],
