@@ -200,7 +200,7 @@ const handleMsg = async (msg) => {
             cmdData.cmdMeta = cmdMeta;
         }
 
-        if (cmdData.cmdMeta.Author_Permission === 1 && msg.senderUsername !== 'trefis') {
+        if (cmdData.cmdMeta.Author_Permission === 1 && msg.senderUsername !== fob.Config.owner) {
             return;
         }
 
@@ -237,7 +237,7 @@ const handleMsg = async (msg) => {
             if (!cmdRun.data) {
                 return await send(
                     cmdData,
-                    'Command returned no data. must be something Pepega',
+                    'Command returned no data. Must be something Pepega',
                 );
             }
 
