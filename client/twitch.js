@@ -51,7 +51,7 @@ client.on('error', (error) => {
 client.on('CLEARCHAT', (msg) => {
     if (msg.isTimeout()) {
         fob.Logger.warn(
-            `${chalk.green('[Timeout]')} || Got timed out in ${
+            `${chalk.green('[Timeout]')} || ${msg.targetUsername} got timed out in ${
                 msg.channelName
             } for ${msg.banDuration} seconds`,
         );
@@ -97,16 +97,14 @@ client.on('NOTICE', async ({channelName, messageID, messageText}) => {
     }
 
     default: {
-        const channelMeta = fob.Channel.get(channelName);
-        await fob.Utils.misc.log(
-            'Notice',
-            'Twitch',
-            channelMeta.ID,
-            null,
-            messageID,
-            messageText,
-            null,
-        );
+        const channelMeta = await fob.Channel.get(channelName);
+        await fob.Utils.db.query(`INSERT INTO Notice (ChannelID, MessageID, MessageText) VALUES ("${channelMeta.ID || 0}","${messageID}","${messageText}")`).catch((e) => {
+            fob.Logger.warn(
+                `${chalk.red('[Sequelize Error]')} || ${
+                    e.name
+                } -> ${e.message} ||| ${e.stack}`,
+            );
+        });
         fob.Logger.info(
             `${chalk.green(
                 '[NOTICE]',
@@ -275,36 +273,45 @@ const send = async (meta, msg) => {
     if (!msg || !meta) {
         return;
     }
-    msg = msg.replace(/\n|\r/g, '');
-    try {
+    if (msg.indexOf('/timeout') > -1) {
+        await client.privmsg(meta.channel, `${msg}`)
+            .catch((e) => {
+                fob.Logger.warn(
+                    `${chalk.red('[Vanish error]')} || Channel: ${meta.channel}, User: ${meta.user.name} ${e.name} -> ${e.message}`,
+                );
+            });
+    } else {
+        msg = msg.replace(/\n|\r/g, '');
+        try {
         // Trim the message to the twitch message limit or lower if configured
-        let lengthLimit = fob.Config.msgLenLimit;
-        lengthLimit -= 2;
-        let message = msg.substring(0, lengthLimit);
-        if (message.length < msg.length) {
-            message = msg.substring(0, lengthLimit - 1) + '…';
-        }
-        await client.privmsg(meta.channel, message);
-    } catch (e) {
-        if (
-            e instanceof Twitch.SayError && e.message.includes('@msg-id=msg_rejected')
-        ) {
-            return await send(
-                meta,
-                'That message violates the channel automod settings.',
+            let lengthLimit = fob.Config.msgLenLimit;
+            lengthLimit -= 2;
+            let message = msg.substring(0, lengthLimit);
+            if (message.length < msg.length) {
+                message = msg.substring(0, lengthLimit - 1) + '…';
+            }
+            await client.privmsg(meta.channel, message);
+        } catch (e) {
+            if (
+                e instanceof Twitch.SayError && e.message.includes('@msg-id=msg_rejected')
+            ) {
+                return await send(
+                    meta,
+                    'That message violates the channel automod settings.',
+                );
+            }
+            if (
+                e instanceof Twitch.SayError && e.message.includes('@msg-id=msg_duplicate')
+            ) {
+                return await send(meta, 'That message was a duplicate monkaS');
+            }
+            await client.say(
+                meta.channel,
+                'Error while processing the reply message monkaS',
             );
+            fob.Logger.error(`Error while processing reply message: ${e}`);
+            await fob.Utils.misc.logError('SendError', e.message, e.stack);
         }
-        if (
-            e instanceof Twitch.SayError && e.message.includes('@msg-id=msg_duplicate')
-        ) {
-            return await send(meta, 'That message was a duplicate monkaS');
-        }
-        await client.say(
-            meta.channel,
-            'Error while processing the reply message monkaS',
-        );
-        fob.Logger.error(`Error while processing reply message: ${e}`);
-        await fob.Utils.misc.logError('SendError', e.message, e.stack);
     }
 };
 
