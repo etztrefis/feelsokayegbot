@@ -29,7 +29,7 @@ module.exports.helix = async () => {
         responseType: 'json',
         headers: {
             'Client-ID': fob.Config.clientid,
-            'Authorization': `Bearer ${await fob.Utils.cache.get('oauth-token')}`,
+            'Authorization': `Bearer ${fob.Config.bearer_token}`,
         },
     });
 };
