@@ -10,6 +10,7 @@
     "dependencies": {
         "@yarnpkg/pnpify": "^2.0.0-rc.25",
         "chalk": "^4.1.0",
+        "child_process": "^1.0.2",
         "dank-twitch-irc": "^3.2.6",
         "dotenv": "^8.2.0",
         "eris": "^0.13.2",
