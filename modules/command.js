@@ -82,7 +82,7 @@ module.exports.sync = async function commandSync() {
             });
         if (command[0][0] === undefined) {
             command = await fob.Utils.db
-                .query(`SELECT * FROM Commands WHERE Aliases LIKE "%${cmdString}%"`)
+                .query(`SELECT * FROM Commands WHERE Aliases LIKE '%"${cmdString}"%'`)
                 .catch((e) => {
                     fob.Logger.warn(
                         `${chalk.red('[Sequelize Error]')} || ${e.name} -> ${

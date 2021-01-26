@@ -37,6 +37,6 @@ module.exports.join = async (channel) => {
                 `Error sequelize insert: (${e.name}) -> ${e.message} ||| ${e.stack}`,
             );
         });
-        return channel;
+        return {reply: channel};
     }
 };
