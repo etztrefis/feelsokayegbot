@@ -22,17 +22,15 @@ module.exports.kraken = got.extend({
 });
 
 // Twitch Helix API
-module.exports.helix = async () => {
-    return got.extend({
-        prefixUrl: 'https://api.twitch.tv/helix',
-        timeout: 1500,
-        responseType: 'json',
-        headers: {
-            'Client-ID': fob.Config.clientid,
-            'Authorization': `Bearer ${fob.Config.bearer_token}`,
-        },
-    });
-};
+module.exports.helix = got.extend({
+    prefixUrl: 'https://api.twitch.tv/helix/',
+    timeout: 1500,
+    responseType: 'json',
+    headers: {
+        'Client-ID': fob.Config.clientid,
+        'Authorization': `Bearer ${fob.Config.bearer_token}`,
+    },
+});
 
 // Twitch TMI API
 module.exports.tmi = got.extend({

@@ -23,18 +23,20 @@ module.exports.getJoinable = async () => {
 };
 
 module.exports.join = async (channel) => {
-    const userID = await fob.Utils.got.helix(`users?login=${channel}`);
-    if (userIDta.body === undefined) {
+    const userID = await fob.Utils.got.helix(`users?login=${channel}`).json();
+    if (userID.data[0] === undefined) {
         return 'User doesn`t exists.';
     }
-    console.log(userID.data[0]['id']);
-    console.log(userID);
     const data = await fob.Channel.getJoinable();
-    console.log(data);
 
     if (data.includes(channel)) {
         return 'Already joined.';
     } else {
-        await fob.Utils.db.query(`INSERT INTO Channel (Name, ID) VALUES ("${channel}", "${userID.data[0]['id'] ?? 0}")`);
+        await fob.Utils.db.query(`INSERT INTO Channels (Name, ID) VALUES ("${channel}", "${userID.data[0]['id']}")`).catch((e) => {
+            fob.Logger.error(
+                `Error sequelize insert: (${e.name}) -> ${e.message} ||| ${e.stack}`,
+            );
+        });
+        return channel;
     }
 };
