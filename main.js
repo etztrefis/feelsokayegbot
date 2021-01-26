@@ -55,10 +55,6 @@ process
             err.message,
             err.stack,
         );
-        await fob.Utils.misc.push(
-            'Uncaught Exception detected!',
-            `${err.stack}`,
-        );
         fob.Logger.error(
             `${chalk.red('[UncaughtException]')} || ${err.message}`,
         );

@@ -1,5 +1,3 @@
-const {ConsoleTransportOptions} = require('winston/lib/winston/transports');
-
 module.exports.help = {
     name: 'ping',
     cooldown: 5000,

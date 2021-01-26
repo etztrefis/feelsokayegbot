@@ -60,3 +60,7 @@ module.exports.supiactive = async () => {
 module.exports.randomArray = (array) => {
     return array[Math.floor(Math.random() * array.length)];
 };
+
+module.exports.logError = async (name, reason, stack) => {
+    await fob.Utils.db.query(`INSERT INTO Logs(Name, Message, Stack) VALUES ("${name}", "${reason}", "${stack}")`);
+};
