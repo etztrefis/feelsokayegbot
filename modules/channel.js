@@ -32,11 +32,33 @@ module.exports.join = async (channel) => {
     if (data.includes(channel)) {
         return 'Already joined.';
     } else {
-        await fob.Utils.db.query(`INSERT INTO Channels (Name, ID) VALUES ("${channel}", "${userID.data[0]['id']}")`).catch((e) => {
-            fob.Logger.error(
-                `Error sequelize insert: (${e.name}) -> ${e.message} ||| ${e.stack}`,
-            );
-        });
-        return {reply: channel};
+        await fob.Utils.db
+            .query(
+                `INSERT INTO Channels (Name, ID) VALUES ("${channel}", "${userID.data[0]['id']}")`,
+            )
+            .catch((e) => {
+                fob.Logger.error(
+                    `Error sequelize insert: (${e.name}) -> ${e.message} ||| ${e.stack}`,
+                );
+            });
+        return 'Done';
+    }
+};
+
+module.exports.leave = async (channel) => {
+    const data = await fob.Channel.getJoinable();
+
+    if (!data.includes(channel)) {
+        return 'W H OMEGALUL.';
+    } else {
+        await fob.Utils.db
+            .query(`DELETE FROM Channels WHERE Name = "${channel}"`)
+            .catch((e) => {
+                fob.Logger.error(
+                    `Error sequelize delete: (${e.name}) -> ${e.message} ||| ${e.stack}`,
+                );
+                return 'Executed with error';
+            });
+        return 'Done';
     }
 };
