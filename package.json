@@ -1,33 +1,31 @@
 {
-    "name": "feelsokayegbot",
-    "version": "0.0.1",
-    "description": "smol dank twitch bot",
-    "scripts": {
-        "start": "yarn node main.js"
-    },
-    "author": "trefis",
-    "license": "MIT",
-    "dependencies": {
-        "@yarnpkg/pnpify": "^2.0.0-rc.25",
-        "chalk": "^4.1.0",
-        "child_process": "^1.0.2",
-        "dank-twitch-irc": "^3.2.6",
-        "dotenv": "^8.2.0",
-        "eris": "^0.13.2",
-        "got": "^11.3.0",
-        "humanize-duration": "^3.25.1",
-        "ioredis": "^4.17.3",
-        "modern-rcon": "^1.0.3",
-        "mysql2": "^2.2.5",
-        "reconnecting-websocket": "^4.4.0",
-        "sequelize": "^6.3.5",
-        "shelljs": "^0.8.4",
-        "winston": "^3.2.1",
-        "ws": "^7.3.0"
-    },
-    "devDependencies": {
-        "babel-eslint": "^10.1.0",
-        "eslint": "^7.2.0",
-        "eslint-config-google": "^0.14.0"
-    }
+  "name": "feelsokayegbot",
+  "version": "1.0.0",
+  "description": "smol damk twitch bot",
+  "main": "index.ts",
+  "scripts": {
+    "start": "ts-node index.ts"
+  },
+  "repository": "git@github.com:etztrefis/feelsokayegbot.git",
+  "author": "trefis <trefis@pm.me>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@types/node": "^17.0.8",
+    "@types/ws": "^8.2.2",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "child_process": "^1.0.2",
+    "dank-twitch-irc": "^4.3.0",
+    "dotenv": "^11.0.0",
+    "humanize-duration": "^3.27.1",
+    "ioredis": "^4.28.2",
+    "picocolors": "^1.0.0",
+    "prisma": "^3.7.0",
+    "reconnecting-websocket": "^4.4.0",
+    "shelljs": "^0.8.5",
+    "ws": "^8.4.0"
+  }
 }
