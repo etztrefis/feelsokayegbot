@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Channel {
+  name               String   @db.VarChar(100)
+  userId             String   @id @db.VarChar(50)
+  date               DateTime @default(now())
+  mode               String   @default("Chatter")
+  ignore             Boolean  @default(false)
+  listenStreamStatus Boolean  @default(false)
+}
+
+model Log {
+  id      Int      @id @default(autoincrement())
+  date    DateTime @default(now())
+  name    String   @db.VarChar(100)
+  message String   @db.Text()
+  stack   String   @db.Text()
+}
