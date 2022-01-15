@@ -7,5 +7,5 @@
     "sourceMap": true,
     "outDir": "dist",
   },
-  "lib": ["ES2020"]
+  "lib": ["ES2020"],
 }
