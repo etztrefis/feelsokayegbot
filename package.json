@@ -4,7 +4,9 @@
   "description": "smol damk twitch bot",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node index.ts"
+    "start": "ts-node index.ts",
+    "migrate": "prisma db push",
+    "generate": "prisma generate"
   },
   "repository": "git@github.com:etztrefis/feelsokayegbot.git",
   "author": "trefis <trefis@pm.me>",
@@ -16,6 +18,7 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
+    "@prisma/client": "3.8.0",
     "axios": "^0.24.0",
     "child_process": "^1.0.2",
     "dank-twitch-irc": "^4.3.0",
@@ -23,9 +26,10 @@
     "humanize-duration": "^3.27.1",
     "ioredis": "^4.28.2",
     "picocolors": "^1.0.0",
-    "prisma": "^3.7.0",
+    "prisma": "^3.8.0",
     "reconnecting-websocket": "^4.4.0",
     "shelljs": "^0.8.5",
+    "winston": "^3.4.0",
     "ws": "^8.4.0"
   }
 }
