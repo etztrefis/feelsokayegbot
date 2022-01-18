@@ -10,7 +10,7 @@ import {
 import * as pc from "picocolors";
 import * as dotenv from "dotenv";
 import { okayeg } from "..";
-import { botConfig, cmdData } from "../types";
+import { botCommand, botConfig, cmdData } from "../types";
 
 dotenv.config({ path: ".env" });
 
@@ -29,7 +29,7 @@ const config: botConfig = {
   userCooldown: Number(process.env.USERCD),
   defaultCooldown: Number(process.env.DEFAULTCD),
   msgLengthLimit: Number(process.env.MSGLENGTHLIMIT),
-  owner: Number(process.env.OWNER),
+  owner: process.env.OWNER,
   botId: process.env.BOTID,
 };
 
@@ -181,6 +181,7 @@ const handleUserMessage = async (msg: PrivmsgMessage) => {
     channelId: msg.channelID,
     channelMeta: channelMeta,
     userState: msg.ircTags,
+    client: client,
   };
 
   // Update bot status in database
@@ -227,10 +228,69 @@ const handleUserMessage = async (msg: PrivmsgMessage) => {
   }
 
   // Input is a command -> process it as such
-  if(msg.messageText.startsWith(okayeg.Config.prefix)){
-    
-  }
+  if (msg.messageText.startsWith(okayeg.Config.prefix)) {
+    const command: botCommand = okayeg.Commands.find(
+      (item) =>
+        item.command.name === commandString ||
+        item.command.aliases.includes(commandString)
+    );
+    if (!command) {
+      return;
+    }
+    commandData.commandMeta = command.command;
 
+    const isAuthorPermissionFalse =
+      commandData.commandMeta.author_permission === true &&
+      msg.senderUsername !== okayeg.Config.owner;
+
+    const isCommandActive = commandData.commandMeta.active;
+
+    if (isAuthorPermissionFalse) {
+      return;
+    }
+
+    if (!isCommandActive) {
+      return;
+    }
+
+    //TODO: check if cooldown is active
+
+    try {
+      await commandData.commandMeta.run(commandData, okayeg);
+      okayeg.Temp.cmdCount++;
+    } catch (e) {
+      await okayeg.Utils.misc.logError(e.name, e.message, e.stack);
+      if (e instanceof SyntaxError) {
+        okayeg.Logger.warn(
+          `${pc.yellow("[SYNTAXERROR]")} || ${e.name} -> ${e.message} || ${
+            e.stack
+          }`
+        );
+        return okayeg.CommandUtils.sendError(
+          commandData.channel,
+          "This command has a Syntax Error"
+        );
+      }
+      if (e instanceof TypeError) {
+        okayeg.Logger.warn(
+          `${pc.yellow("[TYPEERROR]")} || ${e.name} -> ${e.message} || ${
+            e.stack
+          }`
+        );
+        return okayeg.CommandUtils.sendError(
+          commandData.channel,
+          "This command has a Type Error"
+        );
+      }
+      okayeg.CommandUtils.sendError(
+        commandData.channel,
+        "Error occured while executing THIS command. FeelsBadMan"
+      );
+      return okayeg.Logger.warn(
+        `Error occured while executing command: ${e.name} -> ${e.message} || ${e.stack}`
+      );
+    }
+  }
 };
 
 export { client, config, NestedChatClient };
