@@ -9,7 +9,8 @@ interface Bot {
   Temp?: botTemp;
   Utils?: botUtils;
   Channel?: botChannel;
-  Commands?: botCommand;
+  CommandUtils?: botCommandUtils;
+  Commands?: botCommand[];
 }
 
 type botConfig = {
@@ -23,7 +24,7 @@ type botConfig = {
   botId: string;
 
   //actual config
-  owner: number;
+  owner: string;
   prefix: string;
   msgLengthLimit: number;
 
@@ -43,17 +44,35 @@ type botLogger = {
 };
 
 type botCommand = {
-  run: () => void;
+  command: nestedBotCommand;
+};
+
+type nestedBotCommand = {
   name: string;
+  aliases: string[];
+  description?: string;
+  cooldown?: number;
+  // cooldown_mode?: TODO: enum of cooldown modes
+  // permission?: string[]; TODO: mod, vip, etc
+  author_permission: boolean;
+  active: boolean;
+  run: (context: cmdData, okayeg: Bot) => Promise<void>;
+};
+
+type botCommandUtils = {
+  send: (channel: string, message: string) => Promise<void>;
+  sendError: (channel: string, message: string) => void;
 };
 
 type botUtils = {
   db: PrismaClient;
   misc: botUtilsMisc;
+  loadCommands: () => void;
 };
 
 type botTemp = {
   cmdCount: number;
+  commandsDir: string;
 };
 
 type botChannel = {
@@ -76,6 +95,8 @@ type cmdData = {
   channelMeta: Channel | {};
   channelId: string;
   userState: IRCMessageTags;
+  client: NestedChatClient;
+  commandMeta?: nestedBotCommand;
 };
 
 type cmdDataUser = {
