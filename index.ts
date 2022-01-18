@@ -8,8 +8,36 @@ import { info, debug, warn, error } from "./utils/winston";
 import { prisma } from "./utils/database";
 import { get, getJoinable } from "./modules/channel";
 import { uptime, logError, updateBannedState } from "./utils/misc";
+import { send, sendError } from "./modules/command";
 
 const okayeg: Bot = {};
+
+// Dynamic command import
+const loadCommands = () => {
+  if (okayeg.Temp.commandsDir) {
+    fs.readdir(okayeg.Temp.commandsDir, (error, files) => {
+      okayeg.Logger.info(`${pc.green("[COMMANDS]")} || Initializing commands`);
+      files.forEach((file) => {
+        import(`${okayeg.Temp.commandsDir}/${file}`).then(
+          (module: botCommand) => {
+            okayeg.Commands = [];
+            okayeg.Commands.push(module);
+            okayeg.Logger.info(
+              `${pc.green("[COMMANDS]")} || Loading ${module.command.name}`
+            );
+          }
+        );
+      });
+      if (error) {
+        okayeg.Logger.warn(
+          `${pc.green(
+            "[COMMANDS]"
+          )} || Error occured while initializing commands | ${error.message}`
+        );
+      }
+    });
+  }
+};
 
 // Load Modules
 okayeg.Config = config;
@@ -26,23 +54,18 @@ okayeg.Utils = {
     logError: logError,
     updateBannedState: updateBannedState,
   },
+  loadCommands: loadCommands,
 };
 okayeg.Channel = {
   get: get,
   getJoinable: getJoinable,
 };
+okayeg.CommandUtils = {
+  send: send,
+  sendError: sendError,
+};
 
-// Dynamic command import
-const dir = "./commands";
-fs.readdir(dir, (error, files) => {
-  files.forEach((file) => {
-    import(`${dir}/${file}`).then((module: botCommand) => {
-      console.log(module);
-    });
-  });
-});
-
-okayeg.Temp = { cmdCount: 1 };
+okayeg.Temp = { cmdCount: 1, commandsDir: "./commands" };
 
 // Load Clients
 okayeg.Twitch = client;
@@ -51,6 +74,7 @@ okayeg.Twitch = client;
 async function initialize() {
   try {
     //TODO: token check, load all shit
+    okayeg.Utils.loadCommands();
     await okayeg.Twitch.initialize();
   } catch (error) {
     okayeg.Logger.error(`Error encountered during initialization: ${error}`);
