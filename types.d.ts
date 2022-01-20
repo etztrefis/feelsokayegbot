@@ -1,6 +1,8 @@
 import { NestedChatClient } from "./clients";
 import { IRCMessageTags, TwitchBadgesList } from "dank-twitch-irc";
 import { PrismaClient, Channel } from "@prisma/client";
+import { Redis, KeyType } from "ioredis";
+import { mods, levels } from "./modules/cooldowns";
 
 interface Bot {
   Config?: botConfig;
@@ -10,6 +12,7 @@ interface Bot {
   Utils?: botUtils;
   Channel?: botChannel;
   CommandUtils?: botCommandUtils;
+  Cooldown?: (cmdData: cmdData, options: options) => Promise<boolean>;
   Commands?: botCommand[];
 }
 
@@ -52,7 +55,8 @@ type nestedBotCommand = {
   aliases: string[];
   description?: string;
   cooldown?: number;
-  // cooldown_mode?: TODO: enum of cooldown modes
+  bypassCooldown?: boolean;
+  cooldown_mode?: levels;
   // permission?: string[]; TODO: mod, vip, etc
   author_permission: boolean;
   active: boolean;
@@ -60,14 +64,22 @@ type nestedBotCommand = {
 };
 
 type botCommandUtils = {
-  send: (channel: string, message: string) => Promise<void>;
+  send: (channel: string, message: string, cmdData: cmdData) => Promise<void>;
   sendError: (channel: string, message: string) => void;
 };
 
 type botUtils = {
   db: PrismaClient;
   misc: botUtilsMisc;
+  cache: botCacheUtils;
   loadCommands: () => void;
+};
+
+type botCacheUtils = {
+  redis: Redis;
+  set: (key: KeyType, data: boolean, expiry?: number) => Promise<void>;
+  get: (key: KeyType) => Promise<any>;
+  setpx: (key: KeyType, data: boolean, expiry?: number) => Promise<void>;
 };
 
 type botTemp = {
@@ -111,4 +123,9 @@ type cmdDataMessage = {
   raw: string;
   text: string;
   args: string[];
+};
+
+type options = {
+  level?: levels;
+  mode?: mods;
 };
