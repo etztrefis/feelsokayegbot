@@ -6,6 +6,7 @@ import * as fs from "fs";
 export const command = {
   name: "ping",
   active: true,
+  cooldown: 5000,
   author_permission: false,
   aliases: ["pong", "peng", "pang"],
   run: async (context: cmdData, okayeg: Bot) => {
@@ -26,7 +27,8 @@ export const command = {
         }, Uptime: ${okayeg.Utils.misc.uptime()},
                   Temperature: ${temperature.stdout
                     .match(/[+]..../)[0]
-                    .replace("+", "")}°C.`
+                    .replace("+", "")}°C.`,
+        context
       );
     } catch (e) {
       await okayeg.CommandUtils.send(
@@ -35,7 +37,8 @@ export const command = {
           channelsCount.length
         }, Commands executed: ${
           okayeg.Temp.cmdCount
-        }, Uptime: ${okayeg.Utils.misc.uptime()}`
+        }, Uptime: ${okayeg.Utils.misc.uptime()}`,
+        context
       );
     }
   },
