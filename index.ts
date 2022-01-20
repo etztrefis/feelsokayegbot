@@ -9,6 +9,8 @@ import { prisma } from "./utils/database";
 import { get, getJoinable } from "./modules/channel";
 import { uptime, logError, updateBannedState } from "./utils/misc";
 import { send, sendError } from "./modules/command";
+import { redis, redisGet, redisSet, setpx } from "./utils/redis";
+import { cooldownOptions } from "./modules/cooldowns";
 
 const okayeg: Bot = {};
 
@@ -23,7 +25,7 @@ const loadCommands = () => {
             okayeg.Commands = [];
             okayeg.Commands.push(module);
             okayeg.Logger.info(
-              `${pc.green("[COMMANDS]")} || Loading ${module.command.name}`
+              `${pc.green("[COMMANDS]")} || Loaded ${module.command.name}`
             );
           }
         );
@@ -54,6 +56,12 @@ okayeg.Utils = {
     logError: logError,
     updateBannedState: updateBannedState,
   },
+  cache: {
+    redis: redis,
+    get: redisGet,
+    set: redisSet,
+    setpx: setpx,
+  },
   loadCommands: loadCommands,
 };
 okayeg.Channel = {
@@ -64,7 +72,7 @@ okayeg.CommandUtils = {
   send: send,
   sendError: sendError,
 };
-
+okayeg.Cooldown = cooldownOptions;
 okayeg.Temp = { cmdCount: 1, commandsDir: "./commands" };
 
 // Load Clients
