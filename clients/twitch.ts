@@ -11,6 +11,7 @@ import * as pc from "picocolors";
 import * as dotenv from "dotenv";
 import { okayeg } from "..";
 import { botCommand, botConfig, cmdData } from "../types";
+import { mods } from "../modules/cooldowns";
 
 dotenv.config({ path: ".env" });
 
@@ -84,7 +85,11 @@ client.on("CLEARCHAT", async (msg) => {
         msg.channelName
       } for ${msg.banDuration} seconds`
     );
-    //TODO: check if bot is timed out and put that info on to the redis
+    await okayeg.Utils.cache.set(
+      `channelTimeout-${msg.channelName}`,
+      true,
+      msg.banDuration + 5
+    );
   }
   if (msg.isPermaban) {
     okayeg.Logger.warn(
@@ -221,7 +226,9 @@ const handleUserMessage = async (msg: PrivmsgMessage) => {
     return;
   }
 
-  //TODO: check in redis if the bot is timed out -> do not process anything
+  if (await okayeg.Utils.cache.get(`channelTimeouts-${msg.channelName}`)) {
+    return;
+  }
 
   if (channelMeta.ignore === true) {
     return;
@@ -253,7 +260,9 @@ const handleUserMessage = async (msg: PrivmsgMessage) => {
       return;
     }
 
-    //TODO: check if cooldown is active
+    if (okayeg.Cooldown(commandData, { mode: mods.CHECK })) {
+      return;
+    }
 
     try {
       await commandData.commandMeta.run(commandData, okayeg);
