@@ -23,4 +23,17 @@ const getJoinable = async () => {
   return result;
 };
 
-export { get, getJoinable };
+const getListenable = async () => {
+  const channels = await okayeg.Utils.db.channel.findMany({
+    where: { listenStreamStatus: true },
+  });
+  if (!channels) {
+    return [];
+  }
+  const result = channels.map((item) => {
+    return item.userId;
+  });
+  return result;
+};
+
+export { get, getJoinable, getListenable };

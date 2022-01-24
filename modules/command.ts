@@ -4,7 +4,7 @@ import { SayError } from "dank-twitch-irc";
 import { cmdData } from "../types";
 import { levels } from "./cooldowns";
 
-const send = async (channel: string, message: string, cmdData: cmdData) => {
+const send = async (channel: string, message: string, cmdData?: cmdData) => {
   try {
     let lengthLimit = okayeg.Config.msgLengthLimit;
     lengthLimit -= 2;
@@ -13,9 +13,11 @@ const send = async (channel: string, message: string, cmdData: cmdData) => {
       truncatedMessage = `${message.substring(0, --lengthLimit)}...`;
     }
 
-    await okayeg.Cooldown(cmdData, {
-      level: cmdData?.commandMeta.cooldown_mode || levels.USERCOMMAND,
-    });
+    if (cmdData) {
+      await okayeg.Cooldown(cmdData, {
+        level: cmdData?.commandMeta.cooldown_mode || levels.USERCOMMAND,
+      });
+    }
 
     await okayeg.Twitch.privmsg(channel, truncatedMessage);
   } catch (error) {

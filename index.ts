@@ -3,10 +3,10 @@ import * as utils from "util";
 import * as fs from "fs";
 
 import { Bot, botCommand } from "./types";
-import { client, config } from "./clients";
+import { client, config, connect } from "./clients";
 import { info, debug, warn, error } from "./utils/winston";
 import { prisma } from "./utils/database";
-import { get, getJoinable } from "./modules/channel";
+import { get, getJoinable, getListenable } from "./modules/channel";
 import { uptime, logError, updateBannedState } from "./utils/misc";
 import { send, sendError } from "./modules/command";
 import { redis, redisGet, redisSet, setpx } from "./utils/redis";
@@ -46,43 +46,47 @@ const loadCommands = async () => {
 // Load Modules
 okayeg.Config = config;
 okayeg.Logger = {
-  info: info,
-  warn: warn,
-  error: error,
-  debug: debug,
+  info,
+  warn,
+  error,
+  debug,
 };
 okayeg.Utils = {
   db: prisma,
   misc: {
-    uptime: uptime,
-    logError: logError,
-    updateBannedState: updateBannedState,
+    uptime,
+    logError,
+    updateBannedState,
   },
   cache: {
     redis: redis,
     get: redisGet,
     set: redisSet,
-    setpx: setpx,
+    setpx,
   },
-  loadCommands: loadCommands,
+  loadCommands,
   got: { ...apis },
 };
 okayeg.Channel = {
-  get: get,
-  getJoinable: getJoinable,
+  get,
+  getJoinable,
+  getListenable,
 };
 okayeg.Token = {
   check: check,
 };
 okayeg.CommandUtils = {
-  send: send,
-  sendError: sendError,
+  send,
+  sendError,
 };
 okayeg.Cooldown = cooldownOptions;
-okayeg.Temp = { cmdCount: 1, commandsDir: "./commands" };
+okayeg.Temp = { cmdCount: 1, commandsDir: "./commands", pubsubTopics: [] };
 
 // Load Clients
 okayeg.Twitch = client;
+okayeg.PubSub = {
+  connect,
+};
 
 // Initialize Data and Connect Clients
 async function initialize() {
@@ -91,6 +95,7 @@ async function initialize() {
     await okayeg.Utils.loadCommands();
     await okayeg.Token.check();
     await okayeg.Twitch.initialize();
+    await okayeg.PubSub.connect();
   } catch (error) {
     okayeg.Logger.error(`Error encountered during initialization: ${error}`);
   }
