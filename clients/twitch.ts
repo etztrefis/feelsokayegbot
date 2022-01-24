@@ -260,7 +260,7 @@ const handleUserMessage = async (msg: PrivmsgMessage) => {
       return;
     }
 
-    if (okayeg.Cooldown(commandData, { mode: mods.CHECK })) {
+    if (await okayeg.Cooldown(commandData, { mode: mods.CHECK })) {
       return;
     }
 
