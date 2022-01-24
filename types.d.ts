@@ -3,6 +3,7 @@ import { IRCMessageTags, TwitchBadgesList } from "dank-twitch-irc";
 import { PrismaClient, Channel } from "@prisma/client";
 import { Redis, KeyType } from "ioredis";
 import { mods, levels } from "./modules/cooldowns";
+import { AxiosRequestConfig } from "axios";
 
 interface Bot {
   Config?: botConfig;
@@ -13,6 +14,7 @@ interface Bot {
   Channel?: botChannel;
   CommandUtils?: botCommandUtils;
   Cooldown?: (cmdData: cmdData, options: options) => Promise<boolean>;
+  Token?: botToken;
   Commands?: botCommand[];
 }
 
@@ -50,6 +52,10 @@ type botCommand = {
   command: nestedBotCommand;
 };
 
+type botToken = {
+  check: () => Promise<void>;
+};
+
 type nestedBotCommand = {
   name: string;
   aliases: string[];
@@ -72,7 +78,8 @@ type botUtils = {
   db: PrismaClient;
   misc: botUtilsMisc;
   cache: botCacheUtils;
-  loadCommands: () => void;
+  loadCommands: () => Promise<void>;
+  got: botGotUtils;
 };
 
 type botCacheUtils = {
@@ -80,6 +87,13 @@ type botCacheUtils = {
   set: (key: KeyType, data: boolean, expiry?: number) => Promise<void>;
   get: (key: KeyType) => Promise<any>;
   setpx: (key: KeyType, data: boolean, expiry?: number) => Promise<void>;
+};
+
+type botGotUtils = {
+  twitchAuth: (link: string, config?: AxiosRequestConfig) => Promise<any>;
+  kraken: (link: string, config?: AxiosRequestConfig) => Promise<any>;
+  helix: (link: string, config?: AxiosRequestConfig) => Promise<any>;
+  tmi: (link: string, config?: AxiosRequestConfig) => Promise<any>;
 };
 
 type botTemp = {
