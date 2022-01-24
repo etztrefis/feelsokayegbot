@@ -11,11 +11,13 @@ import { uptime, logError, updateBannedState } from "./utils/misc";
 import { send, sendError } from "./modules/command";
 import { redis, redisGet, redisSet, setpx } from "./utils/redis";
 import { cooldownOptions } from "./modules/cooldowns";
+import { check } from "./modules/token";
+import * as apis from "./utils/apiClients";
 
 const okayeg: Bot = {};
 
 // Dynamic command import
-const loadCommands = () => {
+const loadCommands = async () => {
   if (okayeg.Temp.commandsDir) {
     fs.readdir(okayeg.Temp.commandsDir, (error, files) => {
       okayeg.Logger.info(`${pc.green("[COMMANDS]")} || Initializing commands`);
@@ -63,10 +65,14 @@ okayeg.Utils = {
     setpx: setpx,
   },
   loadCommands: loadCommands,
+  got: { ...apis },
 };
 okayeg.Channel = {
   get: get,
   getJoinable: getJoinable,
+};
+okayeg.Token = {
+  check: check,
 };
 okayeg.CommandUtils = {
   send: send,
@@ -82,7 +88,8 @@ okayeg.Twitch = client;
 async function initialize() {
   try {
     //TODO: token check, load all shit
-    okayeg.Utils.loadCommands();
+    await okayeg.Utils.loadCommands();
+    await okayeg.Token.check();
     await okayeg.Twitch.initialize();
   } catch (error) {
     okayeg.Logger.error(`Error encountered during initialization: ${error}`);
