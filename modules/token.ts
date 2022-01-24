@@ -54,4 +54,4 @@ const fetchToken = async () => {
 
 setInterval(async () => {
   check();
-}, 60000);
+}, 600000);
