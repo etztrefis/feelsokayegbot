@@ -8,6 +8,7 @@ import { AxiosRequestConfig } from "axios";
 interface Bot {
   Config?: botConfig;
   Twitch?: NestedChatClient;
+  PubSub?: botPubsub;
   Logger?: botLogger;
   Temp?: botTemp;
   Utils?: botUtils;
@@ -56,6 +57,10 @@ type botToken = {
   check: () => Promise<void>;
 };
 
+type botPubsub = {
+  connect: () => Promise<void>;
+};
+
 type nestedBotCommand = {
   name: string;
   aliases: string[];
@@ -70,7 +75,7 @@ type nestedBotCommand = {
 };
 
 type botCommandUtils = {
-  send: (channel: string, message: string, cmdData: cmdData) => Promise<void>;
+  send: (channel: string, message: string, cmdData?: cmdData) => Promise<void>;
   sendError: (channel: string, message: string) => void;
 };
 
@@ -97,13 +102,21 @@ type botGotUtils = {
 };
 
 type botTemp = {
-  cmdCount: number;
-  commandsDir: string;
+  cmdCount?: number;
+  commandsDir?: string;
+  pubsubTopics?: pubsubTopic[];
+};
+
+type pubsubTopic = {
+  channel: string;
+  topic: string;
+  nonce: string;
 };
 
 type botChannel = {
   get: (channel: string) => Promise<Channel | undefined>;
   getJoinable: () => Promise<string[]>;
+  getListenable: () => Promise<string[]>;
 };
 
 type botUtilsMisc = {
