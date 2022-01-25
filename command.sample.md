@@ -1,5 +1,5 @@
 # Command sample:
-```
+```ts
 export const command = {
   name: "command name",
   active: true,
@@ -33,7 +33,7 @@ export const command = {
 
 # Typings:
 ## Command:
-```
+```ts
 type nestedBotCommand = {
   name: string;
   aliases: string[];
@@ -49,7 +49,7 @@ type nestedBotCommand = {
 ```
 
 ## Levels:
-```
+```ts
 enum levels {
   USERCOMMAND = "UserCommand",
   DISABLED = "Disabled",
@@ -58,7 +58,7 @@ enum levels {
 }
 ```
 ## CommandPermissions:
-```
+```ts
 enum commandPermissions {
   BROADCASTER = "broadcaster",
   MOD = "mod",
