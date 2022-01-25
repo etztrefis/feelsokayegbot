@@ -26,10 +26,10 @@ const loadCommands = async () => {
   if (okayeg.Temp.commandsDir) {
     fs.readdir(okayeg.Temp.commandsDir, (error, files) => {
       okayeg.Logger.info(`${pc.green("[COMMANDS]")} || Initializing commands`);
+      okayeg.Commands = [];
       files.forEach((file) => {
         import(`${okayeg.Temp.commandsDir}/${file}`).then(
           (module: botCommand) => {
-            okayeg.Commands = [];
             okayeg.Commands.push(module);
             okayeg.Logger.info(
               `${pc.green("[COMMANDS]")} || Loaded ${module.command.name}`
@@ -117,9 +117,7 @@ process
       utils.inspect(reason)
     );
     return okayeg.Logger.error(
-      `${pc.red("[UnhandledRejection]")} || ${utils.inspect(
-        promise
-      )} -> ${reason}`
+      `${pc.red("[UnhandledRejection]")} || ${reason}`
     );
   })
   .on("uncaughtException", async (error) => {
