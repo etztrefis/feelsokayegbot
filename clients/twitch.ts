@@ -96,7 +96,7 @@ client.on("CLEARCHAT", async (msg) => {
       msg.banDuration + 5
     );
   }
-  if (msg.isPermaban) {
+  if (msg.isPermaban && !msg.banDuration) {
     okayeg.Logger.warn(
       `${pc.yellow("[BAN]")} ${msg.targetUsername} got banned in ${
         msg.channelName
