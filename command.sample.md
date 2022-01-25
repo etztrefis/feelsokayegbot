@@ -1,5 +1,8 @@
 # Command sample:
 ```ts
+import { Bot, cmdData } from "../types";
+import * as fs from "fs";
+
 export const command = {
   name: "command name",
   active: true,
