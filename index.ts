@@ -13,7 +13,7 @@ import {
   getListenable,
 } from "./modules/channel";
 import { uptime, logError, updateBannedState } from "./utils/misc";
-import { send, sendError } from "./modules/command";
+import * as commandUtils from "./modules/command";
 import { redis, redisGet, redisSet, setpx } from "./utils/redis";
 import { cooldownOptions } from "./modules/cooldowns";
 import { check } from "./modules/token";
@@ -82,8 +82,7 @@ okayeg.Token = {
   check: check,
 };
 okayeg.CommandUtils = {
-  send,
-  sendError,
+  ...commandUtils,
 };
 okayeg.Cooldown = cooldownOptions;
 okayeg.Temp = { cmdCount: 1, commandsDir: "./commands", pubsubTopics: [] };

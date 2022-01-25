@@ -77,6 +77,7 @@ type nestedBotCommand = {
 type botCommandUtils = {
   send: (channel: string, message: string, cmdData?: cmdData) => Promise<void>;
   sendError: (channel: string, message: string) => void;
+  sendCommand: (channel: string, message: string) => Promise<void>;
 };
 
 type botUtils = {
@@ -132,7 +133,7 @@ type cmdData = {
   type: string;
   command: string;
   channel: string;
-  channelMeta: Channel | {};
+  channelMeta: Channel;
   channelId: string;
   userState: IRCMessageTags;
   client: NestedChatClient;

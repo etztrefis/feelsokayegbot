@@ -56,4 +56,8 @@ const sendError = (channel: string, message: string) => {
   okayeg.Twitch.sendRaw(`PRIVMSG #${channel} :${message}`);
 };
 
-export { send, sendError };
+const sendCommand = async (channel: string, message: string) => {
+  await okayeg.Twitch.privmsg(channel, message);
+};
+
+export { send, sendError, sendCommand };
