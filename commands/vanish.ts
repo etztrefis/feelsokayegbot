@@ -7,6 +7,7 @@ export const command = {
   cooldown: 5000,
   author_permission: false,
   aliases: ["vanishme"],
+  description: 'Times out user for 1 second. Only works if FeelsOkayegBot is a channel moderator',
   run: async (context: cmdData, okayeg: Bot) => {
     let result: string;
     if (context.channelMeta.mode === "Moderator") {

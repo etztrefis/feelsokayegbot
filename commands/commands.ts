@@ -8,6 +8,8 @@ export const command = {
   cooldown: 5000,
   cooldown_mode: levels.CHANNEL,
   author_permission: false,
+  description:
+    "Posts list of available commands use author/mod/broadcaster as a first argument to see commands for specified user type if you have the permission for that.",
   aliases: [],
   run: async (context: cmdData, okayeg: Bot) => {
     const arg = context.message.args[0].toLocaleLowerCase();

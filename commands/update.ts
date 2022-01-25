@@ -7,6 +7,7 @@ export const command = {
   active: true,
   cooldown_mode: levels.DISABLED,
   author_permission: true,
+  description: "Resync bot's commands.",
   aliases: [],
   run: async (context: cmdData, okayeg: Bot) => {
     okayeg.Logger.info(

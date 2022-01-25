@@ -7,6 +7,7 @@ export const command = {
   active: true,
   cooldown: 5000,
   author_permission: false,
+  description: 'Posts random joke about your mom.',
   aliases: ["mom"],
   run: async (context: cmdData, okayeg: Bot) => {
     let result: string;

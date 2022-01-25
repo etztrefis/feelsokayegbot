@@ -8,6 +8,7 @@ export const command = {
   active: true,
   cooldown: 5000,
   author_permission: false,
+  description: "Pong!",
   aliases: ["pong", "peng", "pang"],
   run: async (context: cmdData, okayeg: Bot) => {
     const exec = promisify(child.exec);

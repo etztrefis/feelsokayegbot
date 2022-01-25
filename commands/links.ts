@@ -5,6 +5,8 @@ export const command = {
   active: true,
   cooldown: 5000,
   author_permission: false,
+  description:
+    "Posts administration link in chat! Use command with mod or creator as first argument to post a link with view of this channel.",
   aliases: ["link", "l"],
   run: async (context: cmdData, okayeg: Bot) => {
     const arg = context.message.args[0];
