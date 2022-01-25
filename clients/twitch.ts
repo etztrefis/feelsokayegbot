@@ -19,6 +19,11 @@ class NestedChatClient extends ChatClient {
   initialize: () => Promise<void>;
 }
 
+export enum commandPermissions {
+  BROADCASTER = "broadcaster",
+  MOD = "mod",
+}
+
 const config: botConfig = {
   username: process.env.USERNAME,
   password: process.env.PASSWORD,
@@ -254,6 +259,21 @@ const handleUserMessage = async (msg: PrivmsgMessage) => {
 
     if (isAuthorPermissionFalse) {
       return;
+    }
+
+    if (commandData.commandMeta.permission) {
+      const isBroadcaster =
+        commandData.commandMeta.permission === commandPermissions.BROADCASTER &&
+        commandData.user.badges.hasBroadcaster;
+      const isMod =
+        commandData.commandMeta.permission === commandPermissions.MOD &&
+        commandData.user.badges.hasModerator;
+      if (!isBroadcaster) {
+        return null;
+      }
+      if (!isMod) {
+        return null;
+      }
     }
 
     if (!isCommandActive) {

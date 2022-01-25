@@ -48,7 +48,7 @@ pubsub.addEventListener("open", () => {
 
 const listenStreamStatus = async (channel: string) => {
   const channelMeta = await okayeg.Channel.getById(channel);
-  if (!channelMeta && !channelMeta.name) return null;
+  if (!channelMeta || !channelMeta.name) return null;
   const nonce = crypto.randomBytes(20).toString("hex").slice(-8);
   okayeg.Temp.pubsubTopics.push({
     channel: channelMeta.name,
@@ -69,7 +69,7 @@ const listenStreamStatus = async (channel: string) => {
 
 const listenChannelPoints = async (channel: string) => {
   const channelMeta = await okayeg.Channel.getById(channel);
-  if (!channelMeta && !channelMeta.name) return null;
+  if (!channelMeta || !channelMeta.name) return null;
   const nonce = crypto.randomBytes(20).toString("hex").slice(-8);
   okayeg.Temp.pubsubTopics.push({
     channel: channelMeta.name,
@@ -158,8 +158,8 @@ pubsub.addEventListener("message", (event) => {
 });
 
 const handleSocketMessage = async (msg: socketMessage) => {
-  const channelMeta = await okayeg.Channel.getByName(msg.channel);
-  if (!channelMeta && !channelMeta.name) return null;
+  const channelMeta = await okayeg.Channel.getById(msg.channel);
+  if (!channelMeta || !channelMeta.name) return null;
   if (msg) {
     switch (msg.type) {
       case "viewcount":
