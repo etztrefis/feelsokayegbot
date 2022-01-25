@@ -18,7 +18,7 @@ const shortHumanize = humanize.humanizer({
 });
 
 const uptime = () => {
-  const ms = process.uptime() * 100;
+  const ms = process.uptime() * 1000;
   return shortHumanize(ms, {
     units: ["w", "d", "h", "m", "s"],
     largest: 4,
