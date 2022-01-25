@@ -15,20 +15,12 @@ export const command = {
       )} || Called update command. Resynchronizing commands.`
     );
 
-    await okayeg.Utils.loadCommands()
-      .then(async () => {
-        await okayeg.CommandUtils.send(
-          context.channel,
-          "Resynchronizing commands... 🤔 🔍 ",
-          context
-        );
-      })
-      .finally(async () => {
-        await okayeg.CommandUtils.send(
-          context.channel,
-          "Now bot is up to date Okayeg 👍",
-          context
-        );
-      });
+    await okayeg.Utils.loadCommands().then(async () => {
+      await okayeg.CommandUtils.send(
+        context.channel,
+        "Now bot is up to date Okayeg 👍",
+        context
+      );
+    });
   },
 };
