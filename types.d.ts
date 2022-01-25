@@ -114,7 +114,8 @@ type pubsubTopic = {
 };
 
 type botChannel = {
-  get: (channel: string) => Promise<Channel | undefined>;
+  getById: (channel: string) => Promise<Channel | undefined>;
+  getByName: (channel: string) => Promise<Channel | undefined>;
   getJoinable: () => Promise<string[]>;
   getListenable: () => Promise<string[]>;
 };

@@ -6,7 +6,12 @@ import { Bot, botCommand } from "./types";
 import { client, config, connect } from "./clients";
 import { info, debug, warn, error } from "./utils/winston";
 import { prisma } from "./utils/database";
-import { get, getJoinable, getListenable } from "./modules/channel";
+import {
+  getById,
+  getByName,
+  getJoinable,
+  getListenable,
+} from "./modules/channel";
 import { uptime, logError, updateBannedState } from "./utils/misc";
 import { send, sendError } from "./modules/command";
 import { redis, redisGet, redisSet, setpx } from "./utils/redis";
@@ -68,7 +73,8 @@ okayeg.Utils = {
   got: { ...apis },
 };
 okayeg.Channel = {
-  get,
+  getById,
+  getByName,
   getJoinable,
   getListenable,
 };
@@ -91,7 +97,6 @@ okayeg.PubSub = {
 // Initialize Data and Connect Clients
 async function initialize() {
   try {
-    //TODO: token check, load all shit
     await okayeg.Utils.loadCommands();
     await okayeg.Token.check();
     await okayeg.Twitch.initialize();

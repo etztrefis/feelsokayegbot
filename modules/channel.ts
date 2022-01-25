@@ -1,8 +1,18 @@
 import { okayeg } from "..";
 
-const get = async (userId: string) => {
+const getById = async (userId: string) => {
   const channelData = await okayeg.Utils.db.channel.findFirst({
     where: { userId: userId },
+  });
+  if (!channelData) {
+    return undefined;
+  }
+  return channelData;
+};
+
+const getByName = async (name: string) => {
+  const channelData = await okayeg.Utils.db.channel.findFirst({
+    where: { name: name },
   });
   if (!channelData) {
     return undefined;
@@ -36,4 +46,4 @@ const getListenable = async () => {
   return result;
 };
 
-export { get, getJoinable, getListenable };
+export { getById, getByName, getJoinable, getListenable };
