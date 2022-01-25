@@ -47,8 +47,8 @@ pubsub.addEventListener("open", () => {
 });
 
 const listenStreamStatus = async (channel: string) => {
-  const channelMeta = await okayeg.Channel.get(channel);
-  if (!channelMeta.name) return null;
+  const channelMeta = await okayeg.Channel.getById(channel);
+  if (!channelMeta && !channelMeta.name) return null;
   const nonce = crypto.randomBytes(20).toString("hex").slice(-8);
   okayeg.Temp.pubsubTopics.push({
     channel: channelMeta.name,
@@ -68,8 +68,8 @@ const listenStreamStatus = async (channel: string) => {
 };
 
 const listenChannelPoints = async (channel: string) => {
-  const channelMeta = await okayeg.Channel.get(channel);
-  if (!channelMeta.name) return null;
+  const channelMeta = await okayeg.Channel.getById(channel);
+  if (!channelMeta && !channelMeta.name) return null;
   const nonce = crypto.randomBytes(20).toString("hex").slice(-8);
   okayeg.Temp.pubsubTopics.push({
     channel: channelMeta.name,
@@ -81,7 +81,8 @@ const listenChannelPoints = async (channel: string) => {
     nonce: nonce,
     data: {
       topics: [`community-points-channel-v1.${channelMeta.userId}`],
-      auth_token:(await okayeg.Utils.cache.get("oauth-token")) || okayeg.Config.token,
+      auth_token:
+        (await okayeg.Utils.cache.get("oauth-token")) || okayeg.Config.token,
     },
   };
   pubsub.send(JSON.stringify(message));
@@ -157,8 +158,8 @@ pubsub.addEventListener("message", (event) => {
 });
 
 const handleSocketMessage = async (msg: socketMessage) => {
-  const channelMeta = await okayeg.Channel.get(msg.channel);
-  if (!channelMeta.name) return null;
+  const channelMeta = await okayeg.Channel.getByName(msg.channel);
+  if (!channelMeta && !channelMeta.name) return null;
   if (msg) {
     switch (msg.type) {
       case "viewcount":
@@ -181,6 +182,9 @@ const handleSocketMessage = async (msg: socketMessage) => {
           channelMeta.name,
           `Okayeg 👉 ${channelMeta.name} IS LIVE`
         );
+        if (channelMeta.name === okayeg.Config.owner) {
+          await okayeg.CommandUtils.send("pwgood", "@Pooshka, HELLO");
+        }
         break;
       case "stream-down":
         await okayeg.Utils.cache.redis.del(`streamLive-${channelMeta.name}`);

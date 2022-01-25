@@ -164,7 +164,7 @@ const handleUserMessage = async (msg: PrivmsgMessage) => {
   const content = message.split(/\s+/g);
   const command = content[0];
   const commandString = command.slice(okayeg.Config.prefix.length);
-  const channelMeta = await okayeg.Channel.get(msg.channelID);
+  const channelMeta = await okayeg.Channel.getById(msg.channelID);
   const args = content.slice(1);
 
   const commandData: cmdData = {
