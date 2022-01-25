@@ -1,4 +1,4 @@
-import { NestedChatClient } from "./clients";
+import { NestedChatClient, commandPermissions } from "./clients";
 import { IRCMessageTags, TwitchBadgesList } from "dank-twitch-irc";
 import { PrismaClient, Channel } from "@prisma/client";
 import { Redis, KeyType } from "ioredis";
@@ -68,7 +68,7 @@ type nestedBotCommand = {
   cooldown?: number;
   bypassCooldown?: boolean;
   cooldown_mode?: levels;
-  // permission?: string[]; TODO: mod, vip, etc
+  permission?: commandPermissions;
   author_permission: boolean;
   active: boolean;
   run: (context: cmdData, okayeg: Bot) => Promise<void>;
