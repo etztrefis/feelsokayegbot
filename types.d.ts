@@ -26,6 +26,7 @@ type botConfig = {
   clientId: string;
   clientSecret: string;
   token: string;
+  refresh: string;
   bearer: string;
   botId: string;
 

@@ -31,6 +31,7 @@ const config: botConfig = {
   bearer: process.env.BEARER,
   clientSecret: process.env.CLIENTSECRET,
   token: process.env.TOKEN,
+  refresh: process.env.REFRESH,
   prefix: process.env.PREFIX,
   userCooldown: Number(process.env.USERCD),
   defaultCooldown: Number(process.env.DEFAULTCD),
