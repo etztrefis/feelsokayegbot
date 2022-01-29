@@ -17,6 +17,16 @@ const shortHumanize = humanize.humanizer({
   },
 });
 
+const humanizer = (ms: number): string => {
+  return shortHumanize(ms, {
+    units: ["w", "d", "h", "m", "s"],
+    largest: 4,
+    round: true,
+    conjunction: "",
+    spacer: "",
+  });
+};
+
 const uptime = () => {
   const ms = process.uptime() * 1000;
   return shortHumanize(ms, {
@@ -47,4 +57,4 @@ const updateBannedState = async (channelId: string, isBanned: boolean) => {
   });
 };
 
-export { uptime, logError, updateBannedState };
+export { uptime, logError, updateBannedState, humanizer };
