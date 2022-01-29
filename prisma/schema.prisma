@@ -11,12 +11,16 @@ datasource db {
 }
 
 model Channel {
-  name               String   @db.VarChar(100)
-  userId             String   @id @db.VarChar(50)
-  date               DateTime @default(now())
-  mode               String   @default("Chatter")
-  ignore             Boolean  @default(false)
-  listenStreamStatus Boolean  @default(false)
+  name               String    @db.VarChar(100)
+  userId             String    @id @db.VarChar(50)
+  date               DateTime  @default(now())
+  mode               String    @default("Chatter")
+  ignore             Boolean   @default(false)
+  listenStreamStatus Boolean   @default(false)
+  isLive             Boolean?   
+  title              String?   @db.VarChar(100) 
+  game               String?   @db.VarChar(100)
+  gameTime           DateTime? 
 }
 
 model Log {
