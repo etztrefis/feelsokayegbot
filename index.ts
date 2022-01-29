@@ -5,6 +5,7 @@ import * as fs from "fs";
 import { Bot, botCommand } from "./types";
 import { client, config, connect } from "./clients";
 import { info, debug, warn, error } from "./utils/winston";
+import { getInfo } from "./loops";
 import { prisma } from "./utils/database";
 import {
   getById,
@@ -12,7 +13,7 @@ import {
   getJoinable,
   getListenable,
 } from "./modules/channel";
-import { uptime, logError, updateBannedState } from "./utils/misc";
+import { uptime, logError, updateBannedState, humanizer } from "./utils/misc";
 import * as commandUtils from "./modules/command";
 import { redis, redisGet, redisSet, setpx } from "./utils/redis";
 import { cooldownOptions } from "./modules/cooldowns";
@@ -62,6 +63,7 @@ okayeg.Utils = {
     uptime,
     logError,
     updateBannedState,
+    humanizer
   },
   cache: {
     redis: redis,
@@ -72,6 +74,7 @@ okayeg.Utils = {
   loadCommands,
   got: { ...apis },
 };
+okayeg.Loops = { initialize: getInfo };
 okayeg.Channel = {
   getById,
   getByName,
@@ -98,6 +101,7 @@ async function initialize() {
   try {
     await okayeg.Utils.loadCommands();
     await okayeg.Token.check();
+    await okayeg.Loops.initialize();
     await okayeg.Twitch.initialize();
     await okayeg.PubSub.connect();
   } catch (error) {

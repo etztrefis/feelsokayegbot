@@ -9,6 +9,7 @@ interface Bot {
   Config?: botConfig;
   Twitch?: NestedChatClient;
   PubSub?: botPubsub;
+  Loops?: botLoops;
   Logger?: botLogger;
   Temp?: botTemp;
   Utils?: botUtils;
@@ -52,6 +53,10 @@ type botLogger = {
 
 type botCommand = {
   command: nestedBotCommand;
+};
+
+type botLoops = {
+  initialize: () => Promise<void>;
 };
 
 type botToken = {
@@ -126,6 +131,7 @@ type botUtilsMisc = {
   uptime: () => any;
   logError: (name: string, reason: string, stack: string) => Promise<void>;
   updateBannedState: (channelId: string, isBanned: boolean) => Promise<void>;
+  humanizer: (ms: number) => string;
 };
 
 type cmdData = {
