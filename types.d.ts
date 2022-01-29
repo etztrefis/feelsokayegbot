@@ -40,8 +40,10 @@ type botConfig = {
   defaultCooldown: number;
   userCooldown: number;
 
-  //database connection settings
-  //api tokens
+  //spotify
+  spotifySecret: string;
+  spotifyClient: string;
+  spotifyRefresh: string;
 };
 
 type botLogger = {
@@ -106,6 +108,7 @@ type botGotUtils = {
   kraken: (link: string, config?: AxiosRequestConfig) => Promise<any>;
   helix: (link: string, config?: AxiosRequestConfig) => Promise<any>;
   tmi: (link: string, config?: AxiosRequestConfig) => Promise<any>;
+  spotify: (link: string, config?: AxiosRequestConfig) => Promise<any>;
 };
 
 type botTemp = {
