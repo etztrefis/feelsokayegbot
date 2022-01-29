@@ -38,6 +38,9 @@ const config: botConfig = {
   msgLengthLimit: Number(process.env.MSGLENGTHLIMIT),
   owner: process.env.OWNER,
   botId: process.env.BOTID,
+  spotifyClient: process.env.SPOTIFY_CLIENT_ID,
+  spotifySecret: process.env.SPOTIFY_CLIENT_SECRET,
+  spotifyRefresh: process.env.SPOTIFY_REFRESH,
 };
 
 const client = new NestedChatClient({
