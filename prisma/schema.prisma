@@ -17,10 +17,11 @@ model Channel {
   mode               String    @default("Chatter")
   ignore             Boolean   @default(false)
   listenStreamStatus Boolean   @default(false)
-  isLive             Boolean?   
+  isLive             Boolean   @default(false)
   title              String?   @db.VarChar(100) 
   game               String?   @db.VarChar(100)
-  gameTime           DateTime? 
+  gameTime           DateTime?
+  titleTime          DateTime?
 }
 
 model Log {
