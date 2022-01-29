@@ -7,7 +7,7 @@ export const command = {
   active: true,
   cooldown: 5000,
   author_permission: false,
-  description: 'Posts random joke about your mom.',
+  description: "Posts random joke about your mom.",
   aliases: ["mom"],
   run: async (context: cmdData, okayeg: Bot) => {
     let result: string;
@@ -19,7 +19,7 @@ export const command = {
       const randomValue = values[random];
 
       const messageArgs = context.message?.args;
-    if (messageArgs[0]) {
+      if (messageArgs[0]) {
         if (messageArgs[0].charAt(0) === "@") {
           result = `${messageArgs[0]}, ${randomValue} forsenHead`;
         } else {

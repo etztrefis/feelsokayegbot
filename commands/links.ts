@@ -20,6 +20,10 @@ export const command = {
       result = "Available only mod and creator arguments Sadeg";
     }
 
-    await okayeg.CommandUtils.send(context.channel, result, context);
+    await okayeg.CommandUtils.send(
+      context.channel,
+      `${context.user.name}, ${result}`,
+      context
+    );
   },
 };

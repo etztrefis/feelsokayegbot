@@ -12,7 +12,7 @@ export const command = {
     "Posts list of available commands use author/mod/broadcaster as a first argument to see commands for specified user type if you have the permission for that.",
   aliases: [],
   run: async (context: cmdData, okayeg: Bot) => {
-    const arg = context.message.args[0].toLocaleLowerCase();
+    const arg = context.message?.args[0]?.toLocaleLowerCase();
     const isAuthor = context.user.name === okayeg.Config.owner;
     const isMod = context.user.badges.hasModerator;
     const isBroad = context.user.badges.hasBroadcaster;
@@ -50,6 +50,10 @@ export const command = {
         .join(", ")}]`;
     }
 
-    await okayeg.CommandUtils.send(context.channel, result, context);
+    await okayeg.CommandUtils.send(
+      context.channel,
+      `${context.user.name}, ${result}`,
+      context
+    );
   },
 };
