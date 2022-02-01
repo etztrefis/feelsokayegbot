@@ -84,3 +84,13 @@ export const spotify = async (link: string, config?: AxiosRequestConfig) => {
   });
   return data;
 };
+
+// Leppunen API
+export const leppunen = async (link: string, config?: AxiosRequestConfig) => {
+  const { data } = await axios.request({
+    url: `https://api.ivr.fi/v2/twitch/${link}`,
+    timeout: 1500,
+    ...config,
+  });
+  return data;
+};
