@@ -6,7 +6,7 @@ export const command = {
   active: true,
   cooldown: 5000,
   author_permission: false,
-  description: "",
+  description: "Posts stream info about Twitch channel",
   aliases: [],
   run: async (context: cmdData, okayeg: Bot) => {
     let result: string;
