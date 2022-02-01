@@ -9,7 +9,8 @@ export const command = {
   cooldown: 5000,
   cooldown_mode: levels.CHANNEL,
   author_permission: false,
-  description: "Fetches stream's game, sets it if you are a mod on the trefis's channel.",
+  description:
+    "Fetches stream's game, sets it if you are a mod on the trefis's channel.",
   aliases: [],
   run: async (context: cmdData, okayeg: Bot) => {
     const messageArgs = context.message?.args.join(" ");
@@ -54,9 +55,11 @@ export const command = {
         });
     } else {
       if (streamData && streamData.game) {
-        const time = new Date().getTime() - streamData.gameTime.getTime();
+        const delta = okayeg.Utils.misc.timeDelta(
+          streamData.gameTime.getTime()
+        );
         result = `Game: ${streamData.game} ${
-          streamData.gameTime ? `| Last change: ${humanizer(time)} ago` : ""
+          streamData.gameTime ? `| Last change: ${delta} ago` : ""
         }`;
       } else {
         result = "Couldn't get information about the channel Sadeg";

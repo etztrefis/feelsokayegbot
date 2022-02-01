@@ -61,7 +61,7 @@ client.initialize = async () => {
 client.on("ready", async () => {
   okayeg.Logger.info(`${pc.green("[CONNECTED]")} || Connected to Twitch 🥶`);
   await client.say("trefis", "CODINK");
-  await client.say("rilaveon", "YEAHBUT7TV");
+  await client.say("rilaveon", "VeryThinking");
 });
 
 client.on("error", (error) => {

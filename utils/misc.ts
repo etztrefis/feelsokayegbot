@@ -27,6 +27,10 @@ const humanizer = (ms: number): string => {
   });
 };
 
+const timeDelta = (time: number) => {
+  return humanizer(new Date().getTime() - time);
+};
+
 const uptime = () => {
   const ms = process.uptime() * 1000;
   return shortHumanize(ms, {
@@ -57,4 +61,4 @@ const updateBannedState = async (channelId: string, isBanned: boolean) => {
   });
 };
 
-export { uptime, logError, updateBannedState, humanizer };
+export { uptime, logError, updateBannedState, humanizer, timeDelta };
