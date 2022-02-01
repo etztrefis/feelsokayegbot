@@ -109,6 +109,7 @@ type botGotUtils = {
   helix: (link: string, config?: AxiosRequestConfig) => Promise<any>;
   tmi: (link: string, config?: AxiosRequestConfig) => Promise<any>;
   spotify: (link: string, config?: AxiosRequestConfig) => Promise<any>;
+  leppunen: (link: string, config?: AxiosRequestConfig) => Promise<any>;
 };
 
 type botTemp = {
@@ -135,6 +136,7 @@ type botUtilsMisc = {
   logError: (name: string, reason: string, stack: string) => Promise<void>;
   updateBannedState: (channelId: string, isBanned: boolean) => Promise<void>;
   humanizer: (ms: number) => string;
+  timeDelta: (time: number) => string;
 };
 
 type cmdData = {

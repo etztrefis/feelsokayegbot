@@ -13,7 +13,7 @@ import {
   getJoinable,
   getListenable,
 } from "./modules/channel";
-import { uptime, logError, updateBannedState, humanizer } from "./utils/misc";
+import * as misc from "./utils/misc";
 import * as commandUtils from "./modules/command";
 import { redis, redisGet, redisSet, setpx } from "./utils/redis";
 import { cooldownOptions } from "./modules/cooldowns";
@@ -60,10 +60,7 @@ okayeg.Logger = {
 okayeg.Utils = {
   db: prisma,
   misc: {
-    uptime,
-    logError,
-    updateBannedState,
-    humanizer
+    ...misc,
   },
   cache: {
     redis: redis,
